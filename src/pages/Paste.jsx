@@ -1,12 +1,20 @@
 import React from "react";
 import OuterBox from "../components/OuterBox";
-import { MDBTextArea,MDBBtn  } from 'mdb-react-ui-kit';
+import { MDBTextArea  } from 'mdb-react-ui-kit';
 import Select from 'react-select'
+import axios from "axios";
 
 const options = [
-  { value: 'chocolate', label: 'Chocolate' },
-  { value: 'strawberry', label: 'Strawberry' },
-  { value: 'vanilla', label: 'Vanilla' }
+  { value: 'c', label: 'c' },
+  { value: 'c++', label: 'c++' },
+  { value: 'go', label: 'go' },
+  { value: 'python', label: 'python' },
+  { value: 'javascipt', label: 'javascipt' },
+  { value: 'jsx', label: 'jsx' },
+  { value: 'ts', label: 'ts' },
+  { value: 'lisp', label: 'lisp' },
+  { value: 'java', label: 'java' },
+  { value: 'vue', label: 'vue' }
 ]
 
 
@@ -16,12 +24,11 @@ const Paste=()=>{
         <OuterBox>
             <div className="my-4">
                 <div className="mx-auto w-50">
-                    <label>Select Language</label>
-                    <Select options={options} />
+                    <label>Selected Language</label>
+                    <Select defaultValue={"go"} options={options} />
                     <br/>
                     <MDBTextArea label='Paste Code' id='textAreaExample' rows={9} />
                     <br />
-                    <MDBBtn>Create Paste</MDBBtn>
                 </div>
            </div>
 
