@@ -36,7 +36,8 @@ const Home=()=>{
     }
 
 
-    const create=async()=>{
+    const create=async(e)=>{
+        e.preventDefault();
         try{
             
             let {data} = await axios.post("https://codepaste-api.onrender.com/paste/add", {
@@ -61,6 +62,7 @@ const Home=()=>{
         <OuterBox>
             <div className="my-4">
                 <div className="mx-auto w-50">
+                    <form onSubmit={create}>
                     <label>Select Language</label>
                     <Select 
                         defaultValue={lang}
@@ -68,9 +70,10 @@ const Home=()=>{
                         options={options} 
                     />
                     <br/>
-                    <MDBTextArea value={code} onChange={(e)=>setCode(e.target.value)} label='Paste Code' id='textAreaExample' rows={9} />
+                    <MDBTextArea value={code} onChange={(e)=>setCode(e.target.value)} label='Paste Code' id='textAreaExample' rows={9} required={true} />
                     <br />
-                    <MDBBtn onClick={create} disabled={disbuton}>Create Paste</MDBBtn>
+                    <MDBBtn type="submit" disabled={disbuton}>Create Paste</MDBBtn>
+                    </form>
                     <div className="cursor">
 
                         {link?(

@@ -1,36 +1,86 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import OuterBox from "../components/OuterBox";
 import { MDBTextArea  } from 'mdb-react-ui-kit';
-import Select from 'react-select'
+import { AiOutlineCopy, AiOutlineCheck } from "react-icons/ai";
+import { useParams } from 'react-router-dom';
 import axios from "axios";
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
-const options = [
-  { value: 'c', label: 'c' },
-  { value: 'c++', label: 'c++' },
-  { value: 'go', label: 'go' },
-  { value: 'python', label: 'python' },
-  { value: 'javascipt', label: 'javascipt' },
-  { value: 'jsx', label: 'jsx' },
-  { value: 'ts', label: 'ts' },
-  { value: 'lisp', label: 'lisp' },
-  { value: 'java', label: 'java' },
-  { value: 'vue', label: 'vue' }
-]
 
 
 const Paste=()=>{
+
+    let { id } = useParams();
+    const [display, setDisplay] = useState(true);
+    const [text, setText] = useState();
+    const [lang, setLang] = useState();
+    const [copy, setCopy] = useState(false);
+
+    const copied=()=>{
+        setCopy(true);
+
+    }
+
+
+
+
+    useEffect(()=>{
+
+        const getData=async()=>{
+            
+            try {
+                let {data} = await axios.get(`https://codepaste-api.onrender.com/paste/get?slug=${id}`);
+                setText(data.code);
+                setLang(data.lang);
+                
+            } catch (error) {
+                if(error.response.status === 404){
+                    setDisplay(false);
+                }
+            }
+           
+        }
+        getData();
+
+    },[])
+
+
     return(
         <>
         <OuterBox>
-            <div className="my-4">
-                <div className="mx-auto w-50">
-                    <label>Selected Language</label>
-                    <Select defaultValue={"go"} options={options} />
-                    <br/>
-                    <MDBTextArea label='Paste Code' id='textAreaExample' rows={9} />
-                    <br />
+            {display?(
+                <>
+                    <div className="my-4">
+                        <div className="mx-auto w-50">
+                            <br/>
+
+                            {copy?(
+                                    <>
+                                    <AiOutlineCheck className="cursor"/> <span>Copied</span>
+                                    </>
+                                ):(
+                                    <>
+                                    <CopyToClipboard text={text}
+                                    onCopy={copied}>
+                                    <span className="cursor" onClick={copied}> <AiOutlineCopy size="1.5rem"/>Copy</span>
+                                    </CopyToClipboard>
+                                    </>
+                                )} 
+                                <br />
+                                <br />
+                            <MDBTextArea value={text} disabled={true} label='Paste Code' id='textAreaExample' rows={13} />
+                            <br />
+                        </div>
+                    </div>
+                </>
+            ):(
+                <>
+                <div className="my-5">
+                    <h6 className="text-center">No match Found</h6>
                 </div>
-           </div>
+                </>
+            )}
+            
 
         </OuterBox>
         </>
